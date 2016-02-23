@@ -94,6 +94,10 @@ router.get('/thanks/:id', function(req, res, next) {
   res.render('about', {name : req.lead});
 });
 
+router.get('/thanks/', function(req, res, next) {
+  res.render('about');
+});
+
 
 router.post('/lead', function(req, res, next){
 	res.send({success: true});
