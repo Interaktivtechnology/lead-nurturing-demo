@@ -132,10 +132,12 @@ messagesPolling = function() {
 };
 
 chatClosed = function(json) {
+	apiRequest('POST', '/archivechat/', null, {visitor_id : get('visitor_id')});
   unset('secured_session_id');
   unset('visitor_id');
   unset('last_message_id');
   $('#chat').hide();
+
   return addMessage('Chat has ended', 'system');
 };
 
@@ -192,10 +194,18 @@ createUser = function(event) {
   set('name', $('#prechat #name').val());
   set('email', $('#prechat #email').val());
   set('lang', lang);
+  apiRequest('POST', '/lead', function(response){
+  	console.log(response);
+  	set('visitor_id', response.data.id);
+  	return startChat();
+  }, {
+  	'name' :$('#prechat #name').val(),
+  	'email' :$('#prechat #email').val(),
+  });
   if (!get('visitor_id')) {
-    set('visitor_id', (+new Date() + Math.random()) * 1e4);
+    
   }
-  return startChat();
+  
 };
 
 prechatSubmit = function(event) {
@@ -219,11 +229,8 @@ restorePreviousChat = function() {
 
 $(function() {
   
-  if (get('secured_session_id') != '') {
+  if (get('secured_session_id')) {
     restorePreviousChat();
-  }
-  else if(get('visitor_id')){
-  	startChat();	
   }
   else{
   	$('#prechat').submit(prechatSubmit);
