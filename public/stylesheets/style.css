@@ -1,8 +1,158 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+body{
+	font-family: 'GothamBook';
+	font-size: 13px;
 }
-
-a {
-  color: #00B7FF;
+#chat {
+  width: 310px;
+  height: 500px;
+  position: fixed;
+  bottom: 0;
+  right:0;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
+  background: #fff;
+}
+#chat #header {
+  height: 60px;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
+}
+#chat #header #intro {
+  font-size: 32px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  top: 0px;
+  color: #666;
+  position: absolute;
+  background-color: #2b3e50;
+  padding:10px 0;
+}
+#chat #header #img {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+}
+#chat #header #img img {
+  max-width: 100%;
+}
+#chat #header #agent {
+  position: absolute;
+  left: 72px;
+  top: 8px;
+}
+#chat #header #agent #name {
+  font-size: 24px;
+}
+#chat #header #agent #title {
+  font-size: 14px;
+  color: #999;
+}
+#chat #header #close {
+  position: absolute;
+  right: 0;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
+  cursor: pointer;
+}
+#chat #prechat {
+  position: absolute;
+  width: 310px;
+  height: 440px;
+  top: 60px;
+  box-sizing: border-box;
+  text-align: center;
+  padding: 50px 16px 16px 16px;
+  font-size: 16px;
+  z-index: 2;
+}
+#chat #prechat input {
+  font-size: 16px;
+  display: block;
+  width: 61%;
+  margin: 4px auto;
+  margin-bottom: 16px;
+  padding: 4px;
+  outline: none;
+  border: none;
+  border-bottom: 2px solid #999;
+}
+#chat #prechat input:focus {
+  border-bottom: 2px solid #0084ff;
+}
+#chat #prechat button {
+  padding: 8px 16px;
+  background: #0084ff;
+  color: #fff;
+  border: none;
+  outline: none;
+  border-radius: 3px;
+  text-transform: uppercase;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
+  cursor: pointer;
+}
+#chat #prechat button:hover {
+  box-shadow: 0 5px 11px 0 rgba(0,0,0,0.18), 0 4px 15px 0 rgba(0,0,0,0.15), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+#chat #messages {
+  position: absolute;
+  box-sizing: border-box;
+  top: 60px;
+  overflow: auto;
+  width: 310px;
+  height: 367px;
+  padding: 8px 0;
+}
+#chat #messages #container .message {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 4px 8px;
+}
+#chat #messages #container .message span {
+  padding: 2px 16px;
+  border-radius: 12px;
+  display: inline-block;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
+}
+#chat #messages #container .message.agent {
+  text-align: left;
+}
+#chat #messages #container .message.agent > span {
+  background: #f1f0f0;
+  color: #000;
+}
+#chat #messages #container .message.visitor {
+  text-align: right;
+}
+#chat #messages #container .message.visitor > span {
+  background: #0084ff;
+  color: #fff;
+}
+#chat #messages #container .message.system {
+  text-align: center;
+}
+#chat #messages #container .message.system > span {
+  background: #eee;
+  color: #000;
+}
+#chat #textbox {
+  display: none;
+  width: 310px;
+  height: 74px;
+  position: absolute;
+  bottom: 0;
+  box-sizing: border-box;
+  margin: 0;
+  box-shadow: 0 -2px 5px 0 rgba(0,0,0,0.16), 0 -2px 10px 0 rgba(0,0,0,0.12);
+}
+#chat #textbox textarea {
+  width: 100%;
+  height: 100%;
+  resize: none;
+  border: none;
+  outline: none;
+  padding: 8px;
+  box-sizing: border-box;
+  border: 1px solid transparent;
+  font-size: 16px;
 }

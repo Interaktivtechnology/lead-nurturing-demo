@@ -1,0 +1,234 @@
+extends layout
+
+block content
+  h2= title
+  if(name)
+    p Welcome to #{title} #{name.records[0].Name} - #{name.records[0].Email}.
+    p We get your identity from Salesforce
+    
+   #detail_BORROWER.col-xs-12.col-sm-12.col-md-9.col-lg-9.active
+      h3.title-blog.blue-text.yellow-border Borrower's FAQ
+      span.subheading GENERAL
+      ul.faq-list
+        li
+          a(href='#') Are we eligible to apply for a business loan?
+          .container-fluid.faq-detail
+            .row
+              .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                p The company must be 
+                div
+                  | 1.
+                  span.Apple-tab-span(style='white-space:pre')  
+                  | incorporated in Singapore
+                div
+                  | 2.
+                  span.Apple-tab-span(style='white-space:pre')  
+                  | with Singaporean or Permanent Resident Director(s) of at least 30% shareholding
+                div
+                  | 3.
+                  span.Apple-tab-span(style='white-space:pre')  
+                  | either a Private Limited Company (Pte Ltd) or a Limited Liability Partnership (LLP)
+                div
+                  | 4.
+                  span.Apple-tab-span(style='white-space:pre')  
+                  | in business for at least 1 year
+                div
+                  | 5.
+                  span.Apple-tab-span(style='white-space:pre')  
+                  | with an annual turnover of at least $300,000
+                div
+                  | These conditions are not absolute as we review our loan applications on a case-by-case basis. You are encouraged to apply for a loan to check your eligibility. We do not charge any fees for application.
+                div
+                  br
+                p
+        li
+          a(href='#') How do we apply for a loan?
+          .container-fluid.faq-detail
+            .row
+              .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                p
+                  | Simply click 
+                  a(href='#', onclick="window.open('https://www.fundingsocieties.com/membership/signup','_blank');") here
+                  | , fill up the required details and submit the loan application in just a few minutes.
+                div
+                  | Once your application has been submitted, our team will contact you within 2 business days.
+                div
+                  br
+                div
+                  br
+                p
+        li
+          a(href='#') What type of loans can we get?
+          .container-fluid.faq-detail
+            .row
+              .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                p
+                  | We offer a comprehensive suite of SME loan products including but not limited to business terms loans, working capital loans and project loans. We do not ask for any collateral and the loans are secured through the Personal Guarantee of the Directors of the SME.
+        li
+          a(href='#') How long is the loan tenure?
+          .container-fluid.faq-detail
+            .row
+              .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                p Loan tenure ranges from 3 to 24 months.Loan tenure ranges from 3 to 24 months.
+        li
+          a(href='#') How much is the loan amount?
+          .container-fluid.faq-detail
+            .row
+              .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                p Loan amount ranges from $20,000 to $200,000.
+        li
+          a(href='#') What is the interest rate?
+          .container-fluid.faq-detail
+            .row
+              .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                p
+                  | On an average, Interest rate ranges from 9% to 14% per annum on a simple interest basis. Our interest rates are determined basis risk-based pricing model which is derived through our proprietary credit scoring system.
+        li
+          a(href='#') How are repayments done?
+          .container-fluid.faq-detail
+            .row
+              .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                p Repayments (Principal + Interest) are made monthly via GIRO. 
+        li
+          a(href='#') I want to refer my friend for a loan. How do they contact you?
+          .container-fluid.faq-detail
+            .row
+              .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                p
+                  | We are available at +65 6221 0958 on Mondays to Fridays, from 9 am to 6 pm. They may also email us at info@fundingsocieties.com.
+                div
+                  | You will be rewarded with 1% of the total disbursed loan amount for every successful referral made.
+                p
+      span.subheading APPLICATION
+      ul.faq-list
+        li
+          a(href='#') What are the documents required for loan application?
+          .container-fluid.faq-detail
+            .row
+              .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                p The main documents required are 
+                div
+                  | 1.
+                  span.Apple-tab-span(style='white-space:pre')  
+                  | Bank statements for the last 6 months
+                div
+                  | 2.
+                  span.Apple-tab-span(style='white-space:pre')  
+                  | Financial statements
+                div
+                  div
+                    ol
+                      li
+                        | Financial statements for the last 2 years (Audited If Applicable) 
+                        br
+                      li
+                        | Management-prepared (certified true) financial statements for the latest year
+                        br
+                      li
+                        | Others (GST Returns, Ageing List etc on case to case basis)
+                        br
+                div
+                  div
+                    | 3.
+                    span.Apple-tab-span(style='white-space:pre')  
+                    | Guarantor's
+                div
+                  div
+                    ol
+                      li
+                        | NRIC 
+                        br
+                      li
+                        | Notice of Assessment (NOA) for the last 2 years
+                        br
+                      li
+                        | Credit Bureau reports
+                        br
+                      li
+                        | Proof of Residential Address
+                        br
+                p
+        li
+          a(href='#') How soon can I get cash from the loan?
+          .container-fluid.faq-detail
+            .row
+              .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                p Overall, the whole process should be completed within 15-20 business days.
+                div
+                  | The application and approval process would take 4-5 working days. Upon approval, your loan will be put up for crowdfunding for 14 days and it will end as soon as it is fully funded.  
+                  div
+                    br
+                  div
+                    img.subcontent_img(src='http://cms.fundingsocieties.com/images/1453819206896.9_sdfsf.png', style='cursor:pointer;min-height:20px;max-width:500px;max-height:500px;margin-top:5px;background-color:#ccc;')
+                    br
+                p
+        li
+          a(href='#') What happens when crowdfunding is unsuccessful?
+          .container-fluid.faq-detail
+            .row
+              .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                p
+                  | In the unlikely event that your loan is not fully funded by the end of the crowdfunding window, our team will reach out to you to discuss the best next step.
+        li
+          a(href='#') What are the costs & fees involved?
+          .container-fluid.faq-detail
+            .row
+              .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                p
+                  | There are no fees for loan application, and approval. We only charge a competitive fee, upon successful disbursement of your loan.
+        li
+          a(href='#')
+            | Can we apply for another loan if we already have an active loan with Funding Societies?
+          .container-fluid.faq-detail
+            .row
+              .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                p
+                  | Yes, you may apply for a subsequent loan with Funding Societies. However, subsequent loans are also subjected to the full underwriting process.
+      span.subheading REPAYMENT
+      ul.faq-list
+        li
+          a(href='#') How are loan repayments calculated?
+          .container-fluid.faq-detail
+            .row
+              .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                p
+                  | Loan Repayments (Principal + Interest) are calculated based on the loan amount, tenure and simple interest rate. The repayments are made on a monthly basis via GIRO.
+                  br
+        li
+          a(href='#') When will the monthly repayment begin?
+          .container-fluid.faq-detail
+            .row
+              .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                p
+                div
+                  br
+                div
+                  img.subcontent_img(src='http://cms.fundingsocieties.com/images/1453819017871.43_ssqq.png', style='cursor:pointer;min-height:20px;max-width:500px;max-height:500px;margin-top:5px;background-color:#ccc;')
+                  br
+                div
+                  br
+                p
+        li
+          a(href='#') What happens after I have made my last repayment?
+          .container-fluid.faq-detail
+            .row
+              .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                p
+                  | The loan will be concluded and the loan account will be closed. Your user account will still remain accessible to you for future loan applications.
+                  br
+        li
+          a(href='#') Can we make early repayments?
+          .container-fluid.faq-detail
+            .row
+              .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                p
+                  | Yes, you are allowed to make early repayments. Your early repayment is subjected to 2% on outstanding principal. However partial repayments are not allowed.
+                  br
+        li
+          a(href='#') How can we contact Funding Societies for post-disbursal service requirements?
+          .container-fluid.faq-detail
+            .row
+              .col-xs-12.col-sm-12.col-md-12.col-lg-12
+                p
+                  | You can email us at info@fundingsocieties.com or call us at +65 6221 0958 for any post-disbursal service requirements.
+                  br

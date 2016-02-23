@@ -1,7 +1,68 @@
 doctype html
 html
   head
-    title= title
+    title='Salesforce Demo'
     link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='/stylesheets/bootstrap.min.css')
+    meta(http-equiv='Content-type', content='text/html; charset=UTF-8')
   body
-    block content
+    .navbar.navbar-default.navbar-default-top(role='navigation')
+      .container
+        .navbar-header
+          button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+            span.sr-only Toggle navigation
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.navbar-brand(href='/') Funding Societies
+        .navbar-collapse.collapse
+          ul.nav.navbar-nav
+            li.active
+              a(href='/') Home
+            li
+              a(href='/about') About
+            li.dropdown
+              a.dropdown-toggle(href='#', data-toggle='dropdown')
+                | Other 
+                span.caret
+              ul.dropdown-menu(role='menu')
+                li
+                  a(href='/faq') FAQ
+                li
+                  a(href='/invest') Another action
+          ul.nav.navbar-nav.navbar-right
+            li
+              a(href='../navbar/') Welcome 
+           
+        // /.nav-collapse
+    .container
+      // Main component for a primary marketing message or call to action
+      block content
+    #chat
+      #header
+        #img
+        #agent
+          #name
+          #title
+        #intro 
+          img(src='https://www.fundingsocieties.com/webtemplates/fs2/images/logo.png' style='height:60px')
+        #close 
+          i.fa.fa-times X
+      form#prechat
+        input#name(type='text', name='name', placeholder='Type your name...')
+        input#email(type='email', name='email', placeholder='Type your email...')
+        button#start start chat
+      #messages
+        #container
+      form#textbox
+        textarea(placeholder='Type message...')
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js')
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js')
+    script(src='/javascripts/live-chat.js')
+    script(src='/javascripts/live-chat-api.js')
+    if(visitor_id)
+      script.
+        if('#{chat_session_id}' != ''){
+          localStorage.setItem('secured_session_id', '#{chat_session_id}');
+          localStorage.setItem('visitor_id', '#{visitor_id}');
+        }
