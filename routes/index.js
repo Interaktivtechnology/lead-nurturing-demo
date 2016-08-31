@@ -10,17 +10,17 @@ var request = require('request');
 
 router.param('id', function (req, res, next, id) {
   	req.conn = new jsforce.Connection();
-		req.conn.login('lndemo@interaktiv.sg', 'interaktiv.8lFREIiiU4lNjHhOdA7VLvNsW', function(err, res) {
+		req.conn.login(process.env.LnDemo_U, process.env.LnDemo_P, function(err, res) {
 	  	if (err) { return console.error(err); }
   		req.conn.query('SELECT Id, Name, Email FROM Lead Where Id = \'' + id + "'", function(err, res) {
 	    	if (err) { return console.error(err); }
 	    	req.lead = res;
 	    	req.session.visitor = req.lead.records[0].id;
 	    	analytic = {
-	    		IP__c : req.ip,
+	    		IP__c : req.headers['x-forwarded-for'] || req.connection.remoteAddress,
 	    		Lead__c : id,
 	    		Timestamp__c : new Date(),
-	    		URL__c : req.path.replace('/' + req.params.id, '')
+	    		URL__c : req.protocol + '://' + req.get('host') + req.originalUrl
 	    	};
 	    	req.conn.sobject("Analytics__c").create(analytic, function(err, ret){
 	    		if(err || !ret.success)
@@ -28,7 +28,7 @@ router.param('id', function (req, res, next, id) {
 	    		else
 	    			console.log(ret);
 	    	});
-
+        next()
 				var options = {
 				  url: 'https://api.livechatinc.com/visitors/'+ id +'/chat/start',
 				  headers: {
@@ -43,7 +43,7 @@ router.param('id', function (req, res, next, id) {
 						email : res.records[0].Email
 					}
 				};
-				
+
 				function callback(error, response, body) {
 				  if (!error && response.statusCode == 200) {
 				    var info = JSON.parse(body);
@@ -52,16 +52,16 @@ router.param('id', function (req, res, next, id) {
 
 	    			next();
 				  }
-				}	
-				request.post(options, callback); 
+				}
+				request.post(options, callback);
 
-			
+
   		});
 	});
 });
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Funding Societies Salesforce Demo', name : req.lead });
+  res.render('index', { title: 'InterAktiv Salesforce Demo', name : req.lead, url : req.protocol + '://' + req.get('host') + "/thanks" });
 });
 
 router.get('/about/:id', function(req, res, next) {
@@ -76,7 +76,7 @@ router.get('/invest/:id', function(req, res, next) {
 
 
 router.get('/invest', function(req, res, next) {
-	
+
   res.render('invest', {name : req.lead});
 });
 
@@ -87,7 +87,7 @@ router.get('/faq', function(req, res, next) {
 });
 router.get('/faq/:id', function(req, res, next) {
 	console.log(req.sessionChat);
-  	res.render('faq', {name : req.lead, visitor_id : req.visitor_id, chat_session_id : req.sessionChat.secured_session_id});
+  res.render('faq', {name : req.lead, visitor_id : req.visitor_id});
 });
 
 
@@ -116,15 +116,15 @@ router.post('/lead', function(req, res1, next){
 			res1.send({success: true, data:ret});
 			console.log(ret);
 		});
-		
+
 	});
-	
+
 });
 
 router.post('/archivechat/', function(req, res1, next){
 	req.conn = new jsforce.Connection();
 	req.conn.login('lndemo@interaktiv.sg', 'interaktiv.8lFREIiiU4lNjHhOdA7VLvNsW', function(err, res) {
-		
+
 		var options = {
 		  url: 'https://api.livechatinc.com/chats?visitor_id=7155511.'+ req.body.visitor_id,
 		  headers: {
@@ -141,7 +141,7 @@ router.post('/archivechat/', function(req, res1, next){
 				licence_id : '7155511',
 			}
 		};
-		
+
 		var note = {
 			Body : '',
 			Title : 'Chat Archive at ' + (new Date()),
@@ -151,10 +151,10 @@ router.post('/archivechat/', function(req, res1, next){
 		  if (!error && response.statusCode == 200) {
 		    var info = JSON.parse(body);
 		    for(i in info.chats[0].messages){
-		    	note.Body += info.chats[0].messages[i].author_name + ":" + info.chats[0].messages[i].text + " ~" 
+		    	note.Body += info.chats[0].messages[i].author_name + ":" + info.chats[0].messages[i].text + " ~"
 		    	+ info.chats[0].messages[i].date +  " \n";
 		    }
-		    
+
 				req.conn.sobject("Note").create(note, function(err, ret){
 		  			console.log(err);
 		  			console.log(ret);
@@ -162,7 +162,7 @@ router.post('/archivechat/', function(req, res1, next){
 		  	res1.send({success:true});
 		  }
 		}
-		request.get(options, callback); 	
+		request.get(options, callback);
 	});
 });
 

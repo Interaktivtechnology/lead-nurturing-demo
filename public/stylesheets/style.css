@@ -2,6 +2,10 @@ body{
 	font-family: 'GothamBook';
 	font-size: 13px;
 }
+#webToLead .col-sm-6{
+	margin: 10px 0px;
+
+}
 #chat {
   width: 310px;
   height: 500px;

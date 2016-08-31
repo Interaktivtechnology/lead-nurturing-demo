@@ -2,34 +2,34 @@ extends layout
 
 block content
   h2= title
-  p Welcome to #{title}, please complete this form to use salesforce Web2Lead. 
-  .jumbotron
+  p Welcome to Interaktiv Web2Lead and Lead Nurturing demo, please complete this form. 
+  #webToLead.col-md-12.col-lg-12.col-sm-12
     form(action='https://www.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8', method='POST')
-      div.input-group
+      div.col-sm-6
         input(type='hidden', name='oid', value='00D90000000XyAa')
-        input(type='hidden', name='retURL', value='http://test.interaktiv.sg:3000/thanks/')
+        input(type='hidden', name='retURL', value='#{url}')
         label(for='first_name') First Name
         input.form-control#first_name(placeholder='First Name',maxlength='40', name='first_name', size='20', type='text')
-      div.input-group
+      div.col-sm-6
         label(for='last_name') Last Name
         input.form-control#last_name(placeholder='Last Name', maxlength='80', name='last_name', size='20', type='text')
-      div.input-group
+      div.col-sm-6
         label(for='email') Email
         input.form-control#email(placeholder='Email', maxlength='80', name='email', size='20', type='text')
-      div.input-group
+      div.col-sm-6
         label(for='company') Company
         input.form-control#company(placeholder='Company',maxlength='40', name='company', size='20', type='text')
-      div.input-group
+      div.col-sm-6
         label(for='city') City
         input.form-control#city(placeholder='City',maxlength='40', name='city', size='20', type='text')
-      div.input-group
+      div.col-sm-6
         label(for='country') Country
         input.form-control#country(placeholder='Country',maxlength='40', name='country', size='20', type='text')
-      div.input-group
+      div.col-sm-6
         label(for='revenue') Annual Revenue
         input.form-control#revenue(placeholder='Annual Revenue', name='revenue', size='20', type='text')
-      div.input-group
+      div.col-sm-6
         label(for='00N90000002ECWS') Promo Code 
-        input.form-control#00N90000002ECWS(maxlength='255', name='SICCode', size='20', type='text')
+        input.form-control#00N90000002ECWS(maxlength='255', name='SICCode', placeholder="Promo Code", size='20', type='text')
       br
       input.btn.btn-primary(type='submit', name='submit')

@@ -14,7 +14,7 @@ html
             span.icon-bar
             span.icon-bar
             span.icon-bar
-          a.navbar-brand(href='/') Funding Societies
+          a.navbar-brand(href='/') Interaktiv
         .navbar-collapse.collapse
           ul.nav.navbar-nav
             li.active
@@ -38,24 +38,7 @@ html
     .container
       // Main component for a primary marketing message or call to action
       block content
-    #chat
-      #header
-        #img
-        #agent
-          #name
-          #title
-        #intro 
-          img(src='https://www.fundingsocieties.com/webtemplates/fs2/images/logo.png' style='height:60px')
-        #close 
-          i.fa.fa-times X
-      form#prechat
-        input#name(type='text', name='name', placeholder='Type your name...')
-        input#email(type='email', name='email', placeholder='Type your email...')
-        button#start start chat
-      #messages
-        #container
-      form#textbox
-        textarea(placeholder='Type message...')
+  
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js')
     script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js')
     script(src='/javascripts/live-chat.js')
