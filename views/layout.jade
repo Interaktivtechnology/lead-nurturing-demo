@@ -14,10 +14,11 @@ html
             span.icon-bar
             span.icon-bar
             span.icon-bar
-          a.navbar-brand(href='/') Interaktiv
+          a.navbar-brand(href='/') 
+            img(src="/img/logo.png",style="height: 40px")
         .navbar-collapse.collapse
           ul.nav.navbar-nav
-            li.active
+            li
               a(href='/') Home
             li
               a(href='/about') About
@@ -29,7 +30,7 @@ html
                 li
                   a(href='/faq') FAQ
                 li
-                  a(href='/invest') Another action
+                  a(href='https://interaktiv.sg/') Into Our Web
           ul.nav.navbar-nav.navbar-right
             li
               a(href='../navbar/') Welcome 
@@ -38,7 +39,9 @@ html
     .container
       // Main component for a primary marketing message or call to action
       block content
-  
+      div.clearfix
+      .footer
+        a(href="https://interaktiv.sg", target="_blank") InterAktiv Technology Pte Ltd &copy; 2016
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js')
     script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js')
     script(src='/javascripts/live-chat.js')

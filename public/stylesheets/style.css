@@ -4,7 +4,9 @@ body{
 }
 #webToLead .col-sm-6{
 	margin: 10px 0px;
-
+}
+.footer {
+	margin-top: 100px
 }
 #chat {
   width: 310px;

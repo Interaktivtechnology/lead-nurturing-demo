@@ -64,6 +64,9 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'InterAktiv Salesforce Demo', name : req.lead, url : req.protocol + '://' + req.get('host') + "/thanks" });
 });
 
+router.get('/about', function(req, res, next) {
+  	res.render('about', {name : req.lead});
+});
 router.get('/about/:id', function(req, res, next) {
   	res.render('about', {name : req.lead});
 });
@@ -93,12 +96,12 @@ router.get('/faq/:id', function(req, res, next) {
 
 router.get('/thanks/:id', function(req, res, next) {
 	console.log(req.session);
-  res.render('about', {name : req.lead});
+  res.render('thanks', {name : req.lead});
 });
 
 router.get('/thanks/', function(req, res, next) {
 	console.log(req.session);
-  res.render('about');
+  res.render('thanks');
 });
 
 
