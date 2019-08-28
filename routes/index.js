@@ -61,7 +61,8 @@ router.param('id', function (req, res, next, id) {
 });
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'InterAktiv Salesforce Demo', name : req.lead, url : req.protocol + '://' + req.get('host') + "/thanks" });
+	const url = process.env.NODE_ENV === 'dev' ? req.protocol + '://' + req.get('host') + '/thanks' : 'https://sfdemo.interaktiv.sg/thanks';
+  res.render('index', { title: 'InterAktiv Salesforce Demo', name : req.lead, url });
 });
 
 router.get('/about', function(req, res, next) {
