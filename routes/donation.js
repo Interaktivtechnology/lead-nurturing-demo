@@ -3,13 +3,13 @@ const moment = require('moment');
 const crypto = require('crypto');
 const nodefetch = require('node-fetch');
 const { query, validationResult, body } = require('express-validator/check');
-const { redisConnection } = require('../class/redis');
-const { toUrlEncoded, responseFGKeyMCP, getRecordTypes } = require('../class/common');
+const { redisConnection } = require('../module/redis');
+const { toUrlEncoded, responseFGKeyMCP, getRecordTypes } = require('../module/common');
 
 const md5 = crypto.createHash('md5');
 const router = express.Router();
-const salesforce = require('../class/salesforce');
-const { validateSgPostalCode, validateNRIC, validateSfId } = require('../class/validator');
+const salesforce = require('../module/salesforce');
+const { validateSgPostalCode, validateNRIC, validateSfId } = require('../module/validator');
 
 const mcpSecret = process.env[`MCP_SECRET_${process.env.NODE_ENV}`] || '3118010007';
 const mcpId = process.env[`MCP_ID_${process.env.NODE_ENV}`] || '3118010007';

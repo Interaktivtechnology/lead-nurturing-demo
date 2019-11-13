@@ -4,8 +4,8 @@ const assert = require('assert');
 const { describe, before, after } = require('mocha');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const app = require('../');
-const { responseFGKeyMCP } = require('../class/common');
+const app = require('../app');
+const { responseFGKeyMCP } = require('../module/common');
 // Configure chai
 chai.use(chaiHttp);
 chai.should();

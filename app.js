@@ -13,7 +13,7 @@ const debug = require('debug')('FundingSocieties:server');
 const session = require('express-session');
 const users = require('./routes/users');
 const routes = require('./routes/index');
-
+const donation = require('./routes/donation')
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -33,7 +33,7 @@ app.use(session({
     cookie: { secure: true },
 }));
 
-
+app.use('/donation', donation);
 app.use('/', routes);
 app.use('/users', users);
 app.set('trust proxy', 1); // trust first proxy
