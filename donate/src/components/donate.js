@@ -195,9 +195,9 @@ class Donate extends React.Component {
                                 <img className="center-center" src={require('../static/img/interaktiv-logo.png')} style={{ width: 100 }} alt="step logo" />
                             </div>
                             <Col lg={12} smHidden xsHidden style={{ position: 'absolute', bottom: 0, background: 'rgba(0,0,0,0.5)', height: '20%' }}>
-                                <h4 style={{ color: 'white' }}>Interaktiv Digital</h4>
+                                <h4 style={{ color: 'white' }}>InterAktiv Foundation</h4>
                                 <span className="white-text" style={{ lineHeight: '20px' }}>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam
+                                Our goal is to alleviate the poor and focus on global warming issues
                                 </span>
                             </Col>
                         </Col>
