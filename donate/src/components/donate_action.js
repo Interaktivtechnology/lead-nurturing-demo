@@ -21,6 +21,7 @@ export async function submitDonation(formData) {
         phoneNumber: formData.phoneNumber,
         frequentType: formData.recurring ? 'Recurring' : 'One-time',
         remarks: formData.remarks,
+        programmeEvent: formData.programmeEvent,
     };
     if (formData.accountId) {
         donationData.contactId = formData.contactId;
@@ -29,9 +30,6 @@ export async function submitDonation(formData) {
     if (formData.recurring) {
         donationData.frequentPeriod = formData.recurringType;
         donationData.frequencyMax = formData.recurringAmount;
-    }
-    if (formData.programmeEvent) {
-        donationData.programmeEvent = formData.programmeEvent;
     }
     const response = await fetch(`${API_URL}donation/make`, {
         headers: {

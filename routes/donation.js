@@ -119,15 +119,23 @@ async (req, res) => {
             const contactInfo = await req.sfConn.query(`Select Id, AccountId from Contact where AccountId = '${accountId}'`);
             contactId = contactInfo.records.length > 0 ? contactInfo.records[0].Id : null;
         }
+
         const {
             amount, acknowledgePublicity, frequentType, frequentPeriod, frequencyMax, programmeEvent,
         } = req.body;
+        
+        let donationPurpose = 'General Purpose';
+        if (programmeEvent) {
+            donationPurpose = 'Sponsor a Programme';
+        }
+        
         const donationData = {
             Amount__c: amount,
             Contact_Name__c: contactId,
             Donor_Name__c: accountId,
             Donation_Date__c: new Date(),
             Donation_Status__c: 'received',
+            Donation_Purpose__c: donationPurpose,
             Payment_Method__c: 'Credit Card',
             Tax_Deductible__c: true,
             Tax_Credit_To_Name__c: contactId,
