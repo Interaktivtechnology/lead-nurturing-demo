@@ -15,8 +15,8 @@ describe('Test donation page URL', () => {
     let contactResponse = {};
     const postedData = {
         name: faker.name.findName(),
-        idNumber: '',
-        idType: 'Others',
+        idNumber: '123456789',
+        idType: 'PII',
         email: faker.internet.email(),
         address: faker.address.streetAddress(),
         country: 'Singapore',
@@ -27,13 +27,13 @@ describe('Test donation page URL', () => {
         frequentPeriod: 'monthly',
         phoneNumber: '+6285213230818',
         frequencyMax: 12,
-        programmeEvent: 'a0v9D0000004gBq',
+        programmeEvent: 'a1u0o000006OSqV',
     };
     before(async () => {
         const result = await chai.request(app)
             .get('/donation/getContactId')
             .query({
-                email: 'sikomo.eko@gmail.com',
+                email: 'benawv@interaktiv.sg',
             });
         contactResponse = result.body;
         return Promise.resolve();
@@ -56,7 +56,7 @@ describe('Test donation page URL', () => {
         chai.request(app)
             .get('/donation/getContactId')
             .query({
-                email: 'sikomo.eko@gmail.com',
+                email: 'benawv@interaktiv.sg',
             })
             .end((err, res) => {
                 res.should.have.status(200);
@@ -68,7 +68,7 @@ describe('Test donation page URL', () => {
                 done();
             });
     }).timeout(10000);
-    
+
     it('Should create donation and make it as reference', async () => {
         if (contactResponse.contactId) {
             postedData.contactId = contactResponse.contactId;
@@ -145,8 +145,7 @@ describe('Test donation page URL', () => {
             .set({
                 'Content-Type': 'application/json',
             })
-            .send({ id: 'a0r9D0000009PyR' });
-        console.info(resultRecurring.body);
+            .send({ id: 'a1F0o00000Dkzp5' });
         resultRecurring.should.have.status(200);
     }).timeout(10000);
 

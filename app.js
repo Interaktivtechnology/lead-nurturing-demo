@@ -4,16 +4,13 @@ const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-
-const http = require('http');
-
+const cors = require('cors');
 const app = express();
-let server = http.createServer(app);
 const debug = require('debug')('FundingSocieties:server');
 const session = require('express-session');
 const users = require('./routes/users');
 const routes = require('./routes/index');
-const donation = require('./routes/donation')
+const donation = require('./routes/donation');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -33,9 +30,10 @@ app.use(session({
     cookie: { secure: true },
 }));
 
-app.use('/donation', donation);
+app.use(cors());
 app.use('/', routes);
 app.use('/users', users);
+app.use('/donation', donation);
 app.set('trust proxy', 1); // trust first proxy
 
 // catch 404 and forward to error handler
@@ -60,20 +58,5 @@ if (app.get('env') === 'development') {
     });
 }
 
-// production error handler
-// no stacktraces leaked to user
-app.use((err, req, res, next) => {
-    res.status(err.status || 500);
-    res.render('error', {
-        message: err.message,
-        error: {},
-    });
-});
-
-app.set('port', process.env.PORT || 3000);
-
-server = app.listen(app.get('port'), () => {
-    debug(`Express server listening on port ${server.address().port}`);
-});
 
 module.exports = app;

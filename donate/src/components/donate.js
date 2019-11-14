@@ -14,6 +14,7 @@ class Donate extends React.Component {
         super();
         this.state = {
             banner: '',
+            IDno: '',
             salutation: '',
             firstName: '',
             lastName: '',
@@ -149,10 +150,10 @@ class Donate extends React.Component {
         if (this.validationCheck()) {
             this.setState({ loading: true });
             const {
-                salutation, firstName, lastName, email, companyName, address, city, country, stateProvince, postalCode, phoneNumber, notes, anonymous, receiveUpdate, currency, amount, recurring, recurringType, recurringAmount, remarks, accountId, contactId, programmeEvent,
+                IDno, salutation, firstName, lastName, email, companyName, address, city, country, stateProvince, postalCode, phoneNumber, notes, anonymous, receiveUpdate, currency, amount, recurring, recurringType, recurringAmount, remarks, accountId, contactId, programmeEvent,
             } = this.state;
             const data = {
-                salutation, firstName, lastName, email, companyName, address, city, country, stateProvince, postalCode, phoneNumber, notes, anonymous, receiveUpdate, currency, amount, recurring, recurringType, recurringAmount, remarks, accountId, contactId, programmeEvent,
+                IDno, salutation, firstName, lastName, email, companyName, address, city, country, stateProvince, postalCode, phoneNumber, notes, anonymous, receiveUpdate, currency, amount, recurring, recurringType, recurringAmount, remarks, accountId, contactId, programmeEvent,
             };
             
             await submitDonation(data);
@@ -162,10 +163,11 @@ class Donate extends React.Component {
 
     validationCheck() {
         const {
-            firstName, lastName, email, amount,
+            firstName, lastName, email, amount, IDno,
         } = this.state;
 
         const valid = {};
+        valid.IDno = validation(IDno, ['required']);
         valid.firstName = validation(firstName, ['required']);
         valid.lastName = validation(lastName, ['required']);
         valid.email = validation(email, ['required', 'email']);
@@ -180,7 +182,7 @@ class Donate extends React.Component {
 
     render() {
         const {
-            firstName, lastName, email, companyName, address, city, country, stateProvince, postalCode, phoneNumber, anonymous, receiveUpdate, currency, amount, recurring, recurringType, recurringAmount, valid, countryOptions, loading, amountDefault, remarks, programmeEvent,
+            IDno, firstName, lastName, email, companyName, address, city, country, stateProvince, postalCode, phoneNumber, anonymous, receiveUpdate, currency, amount, recurring, recurringType, recurringAmount, valid, countryOptions, loading, amountDefault, remarks, programmeEvent,
             programmeEventList,
         } = this.state;
         
@@ -204,6 +206,10 @@ class Donate extends React.Component {
                             <FormGroup validationState={'email' in valid ? valid.email.state : null} bsSize="small">
                                 <FormControl type="text" placeholder="Email Address" name="email" onChange={this.handleChange} value={email} />
                                 <HelpBlock>{'email' in valid ? valid.email.text : null}</HelpBlock>
+                            </FormGroup>
+                            <FormGroup bsSize="small" validationState={'IDno' in valid ? valid.IDno.state : null}>
+                                <FormControl type="text" placeholder="ID no" name="IDno" onChange={this.handleChange} value={IDno} />
+                                <HelpBlock>{'IDno' in valid ? valid.IDno.text : null}</HelpBlock>
                             </FormGroup>
                             <FormGroup bsSize="small" validationState={'firstName' in valid ? valid.firstName.state : null}>
                                 <FormControl type="text" placeholder="Given Name" name="firstName" onChange={this.handleChange} value={firstName} />

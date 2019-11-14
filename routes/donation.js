@@ -101,7 +101,7 @@ async (req, res) => {
             const {
                 email, idType, idNumber, name, address, country, postalCode, phoneNumber,
             } = req.body;
-            const accountIndividualRecordType = req.recordTypes.filter(obj => obj.SobjectType === 'Account' && obj.Name === 'Individual');
+            const accountIndividualRecordType = req.recordTypes.filter(obj => obj.SobjectType === 'Account' && obj.Name === 'Individual Donors');
             accountId = await req.sfConn.sobject('Account').create({
                 Email__c: email,
                 ID_Type__c: idType,
@@ -131,21 +131,20 @@ async (req, res) => {
             Payment_Method__c: 'Credit Card',
             Tax_Deductible__c: true,
             Tax_Credit_To_Name__c: contactId,
-            Acknowledgement_Sent__c: acknowledgePublicity,
-            Uploaded__c: true,
-            Channel_of_Donation__c: 'StepAsia Website',
+            //Acknowledgement_Sent__c: acknowledgePublicity,
+            //Uploaded__c: true,
+            Channel_of_Donation__c: 'Interaktiv Website',
             Frequency_Type__c: frequentType,
             Frequency_Period__c: frequentPeriod,
-            Frequency_Max__c: frequencyMax,
+            //Frequency_Max__c: frequencyMax,
             Remarks__c: req.body.remarks || '',
             Programme_Event__c: programmeEvent,
-            Sequence__c: frequentType === 'Recurring' ? 1 : null,
+            //Sequence__c: frequentType === 'Recurring' ? 1 : null,
         };
         /* if (accountId) {
             donationData.npe03__Organization__c = accountId;
         } */
         const donationResult = await req.sfConn.sobject('Donation__c').create(donationData);
-
         return res.status(200).send({
             status: 200,
             result: donationResult,
@@ -171,19 +170,22 @@ router.post('/confirm-payment', salesforce.createSfObject, async (req, res) => {
         return res.status(400).send({ body, errorMsg: 'fgkey is not correct' });
     }
     try {
-        const response = await req.sfConn.sobject('Donation__c').update({
+        const data = {
             Id: body.reference,
             Amount__c: body.amt,
             Cleared_Date__c: new Date(body.resdt),
             Donation_Status__c: 'Cleared',
-            Auth_Code__c: body.authcode,
-            Card_Type__c: body.cardco,
-            Credit_Card_No__c: body.cardno.replace(/X|x/g, '0'),
+            //Auth_Code__c: body.authcode,
+            //Card_Type__c: body.cardco,
+            //Credit_Card_No__c: body.cardno.replace(/X|x/g, '0'),
             Transaction_No__c: body.transid,
-            Receipt_Serial_No__c: body.transid,
+            //Receipt_Serial_No__c: body.transid,
             Card_Holder_Name__c: body.buyer,
             // Remarks__c: JSON.stringify(body),
-        });
+        };
+
+        const response = await req.sfConn.sobject('Donation__c').update(data);
+
         if (body.cardtoken) {
             const donation = await req.sfConn.sobject('Donation__c').retrieve(body.reference);
             await req.sfConn.sobject('Contact').update({
@@ -280,7 +282,7 @@ router.get('/active-programmes', redisConnection, salesforce.createSfObject, asy
         result = JSON.parse(result);
         if (result === null) {
             result = await req.sfConn.query(`
-                Select Id, Name, Ttile__c from Programme_Event__c where Published__c = true AND Status__c = 'Approved'
+                Select Id, Name, Ttile__c from Programme_Event__c
             `);
             result = result.records;
             req.redisSet('cache:active-programmes', JSON.stringify(result));
