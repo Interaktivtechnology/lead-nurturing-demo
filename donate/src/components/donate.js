@@ -189,7 +189,7 @@ class Donate extends React.Component {
         return (
             <Col style={{ padding: 0, height: window.innerHeight, backgroundImage: `url(${background})`, backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center center' }}>
                 <form onSubmit={this.handleSubmit}>
-                    <Col lg={10} md={12} sm={12} xs={12} className={window.innerWidth > 1200 ? 'center-h' : null} style={{ float: 'none', display: window.innerWidth > 992 ? 'flex' : null, padding: 0, maxWidth: 1200 }}>
+                    <Col lg={10} md={12} sm={12} xs={12} className={window.innerWidth > 1200 ? 'center-center' : null} style={{ float: 'none', display: window.innerWidth > 992 ? 'flex' : null, padding: 0, maxWidth: 1200 }}>
                         <Col sm={12} xs={12} style={{ backgroundColor: '#fff', padding: 0, backgroundImage: `url(${donateImage})`, backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center top', height: window.innerWidth > 992 ? 'auto' : 70 }}>
                             <div style={{ position: 'absolute', width: 130, height: 70, backgroundColor: '#fff', borderBottomRightRadius: 7 }}>
                                 <img className="center-center" src={require('../static/img/interaktiv-logo.png')} style={{ width: 100 }} alt="step logo" />
