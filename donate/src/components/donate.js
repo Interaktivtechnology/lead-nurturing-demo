@@ -208,7 +208,7 @@ class Donate extends React.Component {
                                 <HelpBlock>{'email' in valid ? valid.email.text : null}</HelpBlock>
                             </FormGroup>
                             <FormGroup bsSize="small" validationState={'IDno' in valid ? valid.IDno.state : null}>
-                                <FormControl type="text" placeholder="ID no" name="IDno" onChange={this.handleChange} value={IDno} />
+                                <FormControl type="text" placeholder="ID No" name="IDno" onChange={this.handleChange} value={IDno} />
                                 <HelpBlock>{'IDno' in valid ? valid.IDno.text : null}</HelpBlock>
                             </FormGroup>
                             <FormGroup bsSize="small" validationState={'firstName' in valid ? valid.firstName.state : null}>
