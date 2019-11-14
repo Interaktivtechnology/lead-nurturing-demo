@@ -14,7 +14,7 @@ const trackVisitor = async (req, res, next) => {
         IP__c: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
         Lead__c: id,
         Timestamp__c: new Date(),
-        URL__c: `${req.protocol}://${req.get('host')}${req.originalUrl}`,
+        URL__c: `${req.originalUrl.replace(id, '')}`,
         Score__c: 10,
     };
     req.sfConn.sobject('Analytics__c').create(analytic, (err, ret) => {

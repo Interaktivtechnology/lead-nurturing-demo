@@ -1,6 +1,9 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const Webpack = require('webpack');
 const FaviconWebpack = require('favicons-webpack-plugin');
+const uglifyJs = require('uglifyjs-webpack-plugin');
+
+
 
 module.exports = (options) => {
     const config = {
@@ -69,7 +72,7 @@ module.exports = (options) => {
         ],
     };
     if (options.isProduction) {
-        config.plugins.push(new Webpack.optimize.UglifyJsPlugin());
+        config.plugins.push(new uglifyJs());
     } else {
         config.devServer = {
             proxy: {

@@ -31,9 +31,11 @@ app.use(session({
 }));
 
 app.use(cors());
-app.use('/', routes);
-app.use('/users', users);
-app.use('/donation', donation);
+const urlPrefix = ''; // process.env.NODE_ENV === 'production' ? 'lndemo' : '';
+app.use(`${urlPrefix}`, routes);
+
+app.use(`${urlPrefix}/users`, users);
+app.use(`${urlPrefix}/donation`, donation);
 app.set('trust proxy', 1); // trust first proxy
 
 // catch 404 and forward to error handler
