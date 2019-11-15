@@ -102,6 +102,7 @@ class Donate extends React.Component {
             this.setState({ [event.target.name]: event.target.value });
         }
 
+        /*
         if (event.target.name === 'email') {
             // const { email } = this.state;
             if (isValidEmail(event.target.value)) {
@@ -136,6 +137,7 @@ class Donate extends React.Component {
                 }
             }
         }
+        */
     }
 
     handleChangeAmountPaymentRadio(event) {
