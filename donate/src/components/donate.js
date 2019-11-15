@@ -281,7 +281,7 @@ class Donate extends React.Component {
                                     value={programmeEvent}
                                 >
                                     <option value="" />
-                                    {programmeEventList.map(programme => (
+                                    {Array.isArray(programmeEventList) && programmeEventList.map(programme => (
                                         <option value={programme.Id}>{programme.Ttile__c}</option>
                                     ))}
                                 </FormControl>
