@@ -245,6 +245,9 @@ input[type="checkbox"] {
     width: 25px;
     background-color: #fff;
 }
+.has-error .checkmark-box {
+    border-color: #a94442;
+}
 .checkmark-box:after {
     content: "";
     position: absolute;

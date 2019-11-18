@@ -20,6 +20,7 @@ export async function submitDonation(formData) {
         frequentType: formData.recurring ? 'Recurring' : 'One-time',
         remarks: formData.remarks,
         programmeEvent: formData.programmeEvent,
+        pdpa: formData.pdpa,
     };
     if (formData.accountId) {
         donationData.contactId = formData.contactId;

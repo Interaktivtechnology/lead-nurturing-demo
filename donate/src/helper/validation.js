@@ -48,7 +48,7 @@ export default function validation(value, type) {
             if (!value) {
                 obj = {
                     success: false,
-                    text: 'Value must true',
+                    text: 'This field is required',
                     state: 'error',
                 };
             }

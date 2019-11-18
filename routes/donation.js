@@ -99,7 +99,7 @@ async (req, res) => {
     try {
         if (contactId === null || accountId === undefined) {
             const {
-                email, idType, idNumber, name, address, country, postalCode, phoneNumber,
+                email, idType, idNumber, name, address, country, postalCode, phoneNumber, pdpa,
             } = req.body;
             const accountIndividualRecordType = req.recordTypes.filter(obj => obj.SobjectType === 'Account' && obj.Name === 'Individual Donors');
             accountId = await req.sfConn.sobject('Account').create({
@@ -118,6 +118,12 @@ async (req, res) => {
             await Promise.resolve(resolve => setTimeout(resolve, 100));
             const contactInfo = await req.sfConn.query(`Select Id, AccountId from Contact where AccountId = '${accountId}'`);
             contactId = contactInfo.records.length > 0 ? contactInfo.records[0].Id : null;
+            
+            // Update Contact for PDPA
+            await req.sfConn.sobject('Contact').update({
+                Id: contactId,
+                PDPA_Signed__c: pdpa,
+            });
         }
 
         const {

@@ -28,6 +28,7 @@ describe('Test donation page URL', () => {
         phoneNumber: '+6285213230818',
         frequencyMax: 12,
         programmeEvent: 'a1u0o000006OSqV',
+        pdpa: true,
     };
     before(async () => {
         const result = await chai.request(app)

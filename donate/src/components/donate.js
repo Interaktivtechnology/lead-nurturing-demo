@@ -42,6 +42,7 @@ class Donate extends React.Component {
             share: true,
             programmeEvent: '',
             programmeEventList: [],
+            pdpa: false,
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleChangeAmountPaymentRadio = this.handleChangeAmountPaymentRadio.bind(this);
@@ -152,10 +153,10 @@ class Donate extends React.Component {
         if (this.validationCheck()) {
             this.setState({ loading: true });
             const {
-                IDno, salutation, firstName, lastName, email, companyName, address, city, country, stateProvince, postalCode, phoneNumber, notes, anonymous, receiveUpdate, currency, amount, recurring, recurringType, recurringAmount, remarks, accountId, contactId, programmeEvent,
+                IDno, salutation, firstName, lastName, email, companyName, address, city, country, stateProvince, postalCode, phoneNumber, notes, anonymous, receiveUpdate, currency, amount, recurring, recurringType, recurringAmount, remarks, accountId, contactId, programmeEvent, pdpa,
             } = this.state;
             const data = {
-                IDno, salutation, firstName, lastName, email, companyName, address, city, country, stateProvince, postalCode, phoneNumber, notes, anonymous, receiveUpdate, currency, amount, recurring, recurringType, recurringAmount, remarks, accountId, contactId, programmeEvent,
+                IDno, salutation, firstName, lastName, email, companyName, address, city, country, stateProvince, postalCode, phoneNumber, notes, anonymous, receiveUpdate, currency, amount, recurring, recurringType, recurringAmount, remarks, accountId, contactId, programmeEvent, pdpa,
             };
             
             await submitDonation(data);
@@ -165,7 +166,7 @@ class Donate extends React.Component {
 
     validationCheck() {
         const {
-            firstName, lastName, email, amount, IDno,
+            firstName, lastName, email, amount, IDno, pdpa,
         } = this.state;
 
         const valid = {};
@@ -174,6 +175,7 @@ class Donate extends React.Component {
         valid.lastName = validation(lastName, ['required']);
         valid.email = validation(email, ['required', 'email']);
         valid.amount = validation(amount.toString(), ['required', 'number']);
+        valid.pdpa = validation(pdpa, ['true']);
         this.setState({ valid });
 
         for (const key of Object.keys(valid)) {
@@ -185,7 +187,7 @@ class Donate extends React.Component {
     render() {
         const {
             IDno, firstName, lastName, email, companyName, address, city, country, stateProvince, postalCode, phoneNumber, anonymous, receiveUpdate, currency, amount, recurring, recurringType, recurringAmount, valid, countryOptions, loading, amountDefault, remarks, programmeEvent,
-            programmeEventList,
+            programmeEventList, pdpa,
         } = this.state;
         
         return (
@@ -372,6 +374,17 @@ class Donate extends React.Component {
                             To make your donation by check, wire transfer, bitcoin, or securities transfer,&nbsp;
                                 <Link to="/" className="blue-text" >click here to learn how</Link>
                             </p>
+                            <Col className="clearfix">
+                                <Checkbox name="pdpa" validationState={'pdpa' in valid ? valid.pdpa.state : null} onChange={this.handleChange} value={pdpa}>
+                                    <span className="checkmark-box" />
+                                    <i className="sm-text">
+                                    By checking this box, I agree for Boys’ Town to use my personal information for purposes related to tax exemption, fundraising, database management and communications, security screening and statistical analysis. I accept that Boys’ Town will keep the personal data confidential and restrict accessibility to only authorised and need-to-know personnel.
+                                        <br />
+                                        <br />
+                                    Donations are entitled to 2.3 times tax deduction (if applicable). Please ensure you provide your NRIC/FIN No.
+                                    </i>
+                                </Checkbox>
+                            </Col>
                             <Button className="center-block" bsStyle="primary" bsSize="lg" type="submit" disabled={loading}>
                                 Submit
                             </Button>
