@@ -30,13 +30,14 @@ export async function submitDonation(formData) {
         donationData.frequentPeriod = formData.recurringType;
         donationData.frequencyMax = formData.recurringAmount;
     }
-
     if (formData.postalCode) {
         donationData.postalCode = formData.postalCode;
     }
-
     if (formData.phoneNumber) {
         donationData.phoneNumber = formData.phoneNumber;
+    }
+    if (formData.IDno) {
+        donationData.IDno = formData.IDno;
     }
 
     const response = await fetch(`${API_URL}donation/make`, {
