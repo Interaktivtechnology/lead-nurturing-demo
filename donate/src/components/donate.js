@@ -37,6 +37,7 @@ class Donate extends React.Component {
             recurringAmount: '',
             valid: {},
             contactId: '',
+            accountId: '',
             loading: false,
             countryOptions: {},
             share: true,
@@ -115,7 +116,15 @@ class Donate extends React.Component {
                         },
                     }).then(res => res.json());
                     this.setState({ loading: false });
-                    if (response.info === null) return;
+                    
+                    if (response.info === null) {
+                        this.setState({
+                            contactId: '',
+                            accountId: '',
+                        }, () => console.info(this.state));
+                        return;
+                    }
+
                     const {
                         BillingCity, BillingCountry, BillingPostalCode, BillingStreet, BillingState, Phone,
                     } = response.info.Account;
