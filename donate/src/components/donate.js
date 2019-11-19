@@ -4,7 +4,7 @@ import {
 } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { submitDonation } from './donate_action';
-import validation, { isValidEmail } from '../helper/validation';
+import validation, { isValidEmail, validateNRIC } from '../helper/validation';
 import background from '../static/img/aerial-singapore.jpg';
 import donateImage from '../static/img/bg-contactus.jpg';
 import { API_URL, CMS_URL } from '../static/variable';
@@ -104,50 +104,69 @@ class Donate extends React.Component {
             this.setState({ [event.target.name]: event.target.value });
         }
 
-        /*
-        if (event.target.name === 'email') {
+        if (event.target.name === 'email' || event.target.name === 'IDno') {
             // const { email } = this.state;
-            if (isValidEmail(event.target.value)) {
-                this.setState({ loading: true });
-                try {
-                    const response = await fetch(`${API_URL}donation/getContactId?email=${encodeURI(event.target.value)}`, {
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                    }).then(res => res.json());
-                    this.setState({ loading: false });
-                    
-                    if (response.info === null) {
-                        this.setState({
-                            contactId: '',
-                            accountId: '',
-                        }, () => console.info(this.state));
-                        return;
-                    }
+            if (event.target.name === 'email') {
+                if (!isValidEmail(event.target.value)) return;
+            }
 
-                    const {
-                        BillingCity, BillingCountry, BillingPostalCode, BillingStreet, BillingState, Phone,
-                    } = response.info.Account;
-                    const nameSplitted = response.info.Name.split(' ');
-                    this.setState({
-                        contactId: response.contactId,
-                        accountId: response.accountId,
-                        loading: false,
-                        address: BillingStreet,
-                        city: BillingCity,
-                        country: BillingCountry,
-                        stateProvince: BillingState,
-                        postalCode: BillingPostalCode,
-                        phoneNumber: Phone,
-                        firstName: nameSplitted[0] || '',
-                        lastName: nameSplitted[1] || '',
-                    }, () => console.info(this.state));
-                } catch (error) {
-                    this.setState({ loading: false });
+            if (event.target.name === 'IDno') {
+                if (!validateNRIC(event.target.value)) return;
+            }
+
+            this.setState({ loading: true });
+            try {
+                let call = `${API_URL}donation/getContactId?`;
+                if (event.target.name === 'email') {
+                    const { IDno } = this.state;
+                    if (!IDno) {
+                        call = `${call}email=${encodeURI(event.target.value)}`;
+                    } else {
+                        call = `${call}email=${encodeURI('x@x.xxx')}&IDno=${encodeURI(IDno)}`;
+                    }
                 }
+                if (event.target.name === 'IDno') {
+                    call = `${call}email=${encodeURI('x@x.xxx')}&IDno=${encodeURI(event.target.value)}`;
+                }
+
+                const response = await fetch(call, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }).then(res => res.json());
+                this.setState({ loading: false });
+
+                if (response.info === null) {
+                    this.setState({
+                        contactId: '',
+                        accountId: '',
+                    }, () => console.info(this.state));
+                    return;
+                }
+
+                const {
+                    BillingCity, BillingCountry, BillingPostalCode, BillingStreet, BillingState, Phone, Email__c, ID_No__c,
+                } = response.info.Account;
+                const nameSplitted = response.info.Name.split(' ');
+                this.setState({
+                    contactId: response.contactId,
+                    accountId: response.accountId,
+                    loading: false,
+                    address: BillingStreet,
+                    city: BillingCity,
+                    country: BillingCountry,
+                    stateProvince: BillingState,
+                    postalCode: BillingPostalCode,
+                    phoneNumber: Phone,
+                    firstName: nameSplitted[0] || '',
+                    lastName: nameSplitted[1] || '',
+                    email: Email__c,
+                    IDno: ID_No__c,
+                }, () => console.info(this.state));
+            } catch (error) {
+                this.setState({ loading: false });
             }
         }
-        */
     }
 
     handleChangeAmountPaymentRadio(event) {

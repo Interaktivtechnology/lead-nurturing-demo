@@ -17,7 +17,7 @@ const MCP_WEBHOOK = process.env[`MCP_WEBHOOK_${process.env.NODE_ENV}`] || 'https
 
 router.get('/getContactId',
     [
-        query('email').isEmail().withMessage('INVALID_EMAIL'),
+        query('email').optional().isEmail().withMessage('INVALID_EMAIL'),
     ],
     redisConnection,
     salesforce.createSfObject, async (req, res) => {
@@ -26,21 +26,39 @@ router.get('/getContactId',
             return res.status(400).json({ status: 400, message: errors.array() });
         }
         try {
-            let result = await req.redisGet(`cache:contactId:${req.query.email}`);
+            let result = null;
+            if (req.query.IDno) {
+                result = await req.redisGet(`cache:contactId:${req.query.IDno}`);
+            } else {
+                result = await req.redisGet(`cache:contactId:${req.query.email}`);
+            }
+
             if (result === null) {
-                result = await req.sfConn.query(`
-                    Select Id, Name, AccountId,
-                        Account.BillingStreet,
-                        Account.BillingCity,
-                        Account.BillingCountry,
-                        Account.BillingPostalCode,
-                        Account.BillingState,
-                        Account.Phone
-                    from Contact where Account.Email__c = '${req.query.email}'
-                `);
+                let textQuery = `Select Id, Name, AccountId,
+                    Account.BillingStreet,
+                    Account.BillingCity,
+                    Account.BillingCountry,
+                    Account.BillingPostalCode,
+                    Account.BillingState,
+                    Account.Phone,
+                    Account.Email__c,
+                    Account.ID_No__c`;
+
+                if (req.query.IDno) {
+                    textQuery = `${textQuery} from Contact where Account.ID_No__c = '${req.query.IDno}'`;
+                } else {
+                    textQuery = `${textQuery} from Contact where Account.Email__c = '${req.query.email}'`;
+                }
+
+                result = await req.sfConn.query(textQuery);
                 if (result.records.length > 0) {
-                    req.redisSet(`cache:contactId:${req.query.email}`, JSON.stringify(result));
-                    req.redisExpire(`cache:contactId:${req.query.email}`, 3600 * 24);
+                    if (req.query.IDno) {
+                        req.redisSet(`cache:contactId:${req.query.IDno}`, JSON.stringify(result));
+                        req.redisExpire(`cache:contactId:${req.query.IDno}`, 3600 * 24);
+                    } else {
+                        req.redisSet(`cache:contactId:${req.query.email}`, JSON.stringify(result));
+                        req.redisExpire(`cache:contactId:${req.query.email}`, 3600 * 24);    
+                    }
                 }
             } else {
                 result = JSON.parse(result);
