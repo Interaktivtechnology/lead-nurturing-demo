@@ -17,7 +17,7 @@ const MCP_WEBHOOK = process.env[`MCP_WEBHOOK_${process.env.NODE_ENV}`] || 'https
 
 router.get('/getContactId',
     [
-        query('email').isEmail().withMessage('INVALID_EMAIL'),
+        query('email').optional().isEmail().withMessage('INVALID_EMAIL'),
     ],
     redisConnection,
     salesforce.createSfObject, async (req, res) => {
@@ -26,21 +26,39 @@ router.get('/getContactId',
             return res.status(400).json({ status: 400, message: errors.array() });
         }
         try {
-            let result = await req.redisGet(`cache:contactId:${req.query.email}`);
+            let result = null;
+            if (req.query.IDno) {
+                result = await req.redisGet(`cache:contactId:${req.query.IDno}`);
+            } else {
+                result = await req.redisGet(`cache:contactId:${req.query.email}`);
+            }
+
             if (result === null) {
-                result = await req.sfConn.query(`
-                    Select Id, Name, AccountId,
-                        Account.BillingStreet,
-                        Account.BillingCity,
-                        Account.BillingCountry,
-                        Account.BillingPostalCode,
-                        Account.BillingState,
-                        Account.Phone
-                    from Contact where Account.Email__c = '${req.query.email}'
-                `);
+                let textQuery = `Select Id, Name, AccountId,
+                    Account.BillingStreet,
+                    Account.BillingCity,
+                    Account.BillingCountry,
+                    Account.BillingPostalCode,
+                    Account.BillingState,
+                    Account.Phone,
+                    Account.Email__c,
+                    Account.ID_No__c`;
+
+                if (req.query.IDno) {
+                    textQuery = `${textQuery} from Contact where Account.ID_No__c = '${req.query.IDno}'`;
+                } else {
+                    textQuery = `${textQuery} from Contact where Account.Email__c = '${req.query.email}'`;
+                }
+
+                result = await req.sfConn.query(textQuery);
                 if (result.records.length > 0) {
-                    req.redisSet(`cache:contactId:${req.query.email}`, JSON.stringify(result));
-                    req.redisExpire(`cache:contactId:${req.query.email}`, 3600 * 24);
+                    if (req.query.IDno) {
+                        req.redisSet(`cache:contactId:${req.query.IDno}`, JSON.stringify(result));
+                        req.redisExpire(`cache:contactId:${req.query.IDno}`, 3600 * 24);
+                    } else {
+                        req.redisSet(`cache:contactId:${req.query.email}`, JSON.stringify(result));
+                        req.redisExpire(`cache:contactId:${req.query.email}`, 3600 * 24);    
+                    }
                 }
             } else {
                 result = JSON.parse(result);
@@ -99,7 +117,7 @@ async (req, res) => {
     try {
         if (contactId === null || accountId === undefined) {
             const {
-                email, idType, idNumber, name, address, country, postalCode, phoneNumber,
+                email, idType, idNumber, name, address, country, postalCode, phoneNumber, pdpa,
             } = req.body;
             const accountIndividualRecordType = req.recordTypes.filter(obj => obj.SobjectType === 'Account' && obj.Name === 'Individual Donors');
             accountId = await req.sfConn.sobject('Account').create({
@@ -118,16 +136,30 @@ async (req, res) => {
             await Promise.resolve(resolve => setTimeout(resolve, 100));
             const contactInfo = await req.sfConn.query(`Select Id, AccountId from Contact where AccountId = '${accountId}'`);
             contactId = contactInfo.records.length > 0 ? contactInfo.records[0].Id : null;
+            
+            // Update Contact for PDPA
+            await req.sfConn.sobject('Contact').update({
+                Id: contactId,
+                PDPA_Signed__c: pdpa,
+            });
         }
+
         const {
             amount, acknowledgePublicity, frequentType, frequentPeriod, frequencyMax, programmeEvent,
         } = req.body;
+        
+        let donationPurpose = 'General Purpose';
+        if (programmeEvent) {
+            donationPurpose = 'Sponsor a Programme';
+        }
+        
         const donationData = {
             Amount__c: amount,
             Contact_Name__c: contactId,
             Donor_Name__c: accountId,
             Donation_Date__c: new Date(),
             Donation_Status__c: 'received',
+            Donation_Purpose__c: donationPurpose,
             Payment_Method__c: 'Credit Card',
             Tax_Deductible__c: true,
             Tax_Credit_To_Name__c: contactId,

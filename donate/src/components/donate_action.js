@@ -15,12 +15,12 @@ export async function submitDonation(formData) {
         email: formData.email,
         address: formData.address,
         country: 'Singapore',
-        postalCode: formData.postalCode,
         acknowledgePublicity: formData.acknowledgedPublicly,
         amount: formData.amount,
-        phoneNumber: formData.phoneNumber,
         frequentType: formData.recurring ? 'Recurring' : 'One-time',
         remarks: formData.remarks,
+        programmeEvent: formData.programmeEvent,
+        pdpa: formData.pdpa,
     };
     if (formData.accountId) {
         donationData.contactId = formData.contactId;
@@ -30,9 +30,16 @@ export async function submitDonation(formData) {
         donationData.frequentPeriod = formData.recurringType;
         donationData.frequencyMax = formData.recurringAmount;
     }
-    if (formData.programmeEvent) {
-        donationData.programmeEvent = formData.programmeEvent;
+    if (formData.postalCode) {
+        donationData.postalCode = formData.postalCode;
     }
+    if (formData.phoneNumber) {
+        donationData.phoneNumber = formData.phoneNumber;
+    }
+    if (formData.IDno) {
+        donationData.IDno = formData.IDno;
+    }
+
     const response = await fetch(`${API_URL}donation/make`, {
         headers: {
             'Content-Type': 'application/json',
@@ -40,6 +47,7 @@ export async function submitDonation(formData) {
         body: JSON.stringify(donationData),
         method: 'POST',
     }).then(res => res.json());
+
     if (response.result) {
         const beforeEncrypted = `${mcpSecret}?mid=${mcpMID}&ref=${response.result.id}&cur=${currency}&amt=${formData.amount}`;
         const encrypted = md5(beforeEncrypted);
@@ -60,6 +68,7 @@ export async function submitDonation(formData) {
             fgkey: encrypted.toString(),
             tokenize: 'Y',
         };
+
         const form = document.createElement('form');
         document.body.appendChild(form);
         form.method = 'post';
@@ -72,7 +81,6 @@ export async function submitDonation(formData) {
             input.value = data[key];
             form.appendChild(input);
         }
-
         form.submit();
     } else {
         let errorMessage = '';

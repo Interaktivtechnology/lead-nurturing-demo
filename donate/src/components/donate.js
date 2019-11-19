@@ -4,7 +4,7 @@ import {
 } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { submitDonation } from './donate_action';
-import validation, { isValidEmail } from '../helper/validation';
+import validation, { isValidEmail, validateNRIC } from '../helper/validation';
 import background from '../static/img/aerial-singapore.jpg';
 import donateImage from '../static/img/bg-contactus.jpg';
 import { API_URL, CMS_URL } from '../static/variable';
@@ -37,11 +37,13 @@ class Donate extends React.Component {
             recurringAmount: '',
             valid: {},
             contactId: '',
+            accountId: '',
             loading: false,
             countryOptions: {},
             share: true,
             programmeEvent: '',
             programmeEventList: [],
+            pdpa: false,
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleChangeAmountPaymentRadio = this.handleChangeAmountPaymentRadio.bind(this);
@@ -102,38 +104,67 @@ class Donate extends React.Component {
             this.setState({ [event.target.name]: event.target.value });
         }
 
-        if (event.target.name === 'email') {
+        if (event.target.name === 'email' || event.target.name === 'IDno') {
             // const { email } = this.state;
-            if (isValidEmail(event.target.value)) {
-                this.setState({ loading: true });
-                try {
-                    const response = await fetch(`${API_URL}donation/getContactId?email=${encodeURI(event.target.value)}`, {
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                    }).then(res => res.json());
-                    this.setState({ loading: false });
-                    if (response.info === null) return;
-                    const {
-                        BillingCity, BillingCountry, BillingPostalCode, BillingStreet, BillingState, Phone,
-                    } = response.info.Account;
-                    const nameSplitted = response.info.Name.split(' ');
-                    this.setState({
-                        contactId: response.contactId,
-                        accountId: response.accountId,
-                        loading: false,
-                        address: BillingStreet,
-                        city: BillingCity,
-                        country: BillingCountry,
-                        stateProvince: BillingState,
-                        postalCode: BillingPostalCode,
-                        phoneNumber: Phone,
-                        firstName: nameSplitted[0] || '',
-                        lastName: nameSplitted[1] || '',
-                    }, () => console.info(this.state));
-                } catch (error) {
-                    this.setState({ loading: false });
+            if (event.target.name === 'email') {
+                if (!isValidEmail(event.target.value)) return;
+            }
+
+            if (event.target.name === 'IDno') {
+                if (!validateNRIC(event.target.value)) return;
+            }
+
+            this.setState({ loading: true });
+            try {
+                let call = `${API_URL}donation/getContactId?`;
+                if (event.target.name === 'email') {
+                    const { IDno } = this.state;
+                    if (!IDno) {
+                        call = `${call}email=${encodeURI(event.target.value)}`;
+                    } else {
+                        call = `${call}email=${encodeURI('x@x.xxx')}&IDno=${encodeURI(IDno)}`;
+                    }
                 }
+                if (event.target.name === 'IDno') {
+                    call = `${call}email=${encodeURI('x@x.xxx')}&IDno=${encodeURI(event.target.value)}`;
+                }
+
+                const response = await fetch(call, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }).then(res => res.json());
+                this.setState({ loading: false });
+
+                if (response.info === null) {
+                    this.setState({
+                        contactId: '',
+                        accountId: '',
+                    }, () => console.info(this.state));
+                    return;
+                }
+
+                const {
+                    BillingCity, BillingCountry, BillingPostalCode, BillingStreet, BillingState, Phone, Email__c, ID_No__c,
+                } = response.info.Account;
+                const nameSplitted = response.info.Name.split(' ');
+                this.setState({
+                    contactId: response.contactId,
+                    accountId: response.accountId,
+                    loading: false,
+                    address: BillingStreet,
+                    city: BillingCity,
+                    country: BillingCountry,
+                    stateProvince: BillingState,
+                    postalCode: BillingPostalCode,
+                    phoneNumber: Phone,
+                    firstName: nameSplitted[0] || '',
+                    lastName: nameSplitted[1] || '',
+                    email: Email__c,
+                    IDno: ID_No__c,
+                }, () => console.info(this.state));
+            } catch (error) {
+                this.setState({ loading: false });
             }
         }
     }
@@ -150,10 +181,10 @@ class Donate extends React.Component {
         if (this.validationCheck()) {
             this.setState({ loading: true });
             const {
-                IDno, salutation, firstName, lastName, email, companyName, address, city, country, stateProvince, postalCode, phoneNumber, notes, anonymous, receiveUpdate, currency, amount, recurring, recurringType, recurringAmount, remarks, accountId, contactId, programmeEvent,
+                IDno, salutation, firstName, lastName, email, companyName, address, city, country, stateProvince, postalCode, phoneNumber, notes, anonymous, receiveUpdate, currency, amount, recurring, recurringType, recurringAmount, remarks, accountId, contactId, programmeEvent, pdpa,
             } = this.state;
             const data = {
-                IDno, salutation, firstName, lastName, email, companyName, address, city, country, stateProvince, postalCode, phoneNumber, notes, anonymous, receiveUpdate, currency, amount, recurring, recurringType, recurringAmount, remarks, accountId, contactId, programmeEvent,
+                IDno, salutation, firstName, lastName, email, companyName, address, city, country, stateProvince, postalCode, phoneNumber, notes, anonymous, receiveUpdate, currency, amount, recurring, recurringType, recurringAmount, remarks, accountId, contactId, programmeEvent, pdpa,
             };
             
             await submitDonation(data);
@@ -163,15 +194,15 @@ class Donate extends React.Component {
 
     validationCheck() {
         const {
-            firstName, lastName, email, amount, IDno,
+            firstName, lastName, email, amount, pdpa,
         } = this.state;
 
         const valid = {};
-        valid.IDno = validation(IDno, ['required']);
         valid.firstName = validation(firstName, ['required']);
         valid.lastName = validation(lastName, ['required']);
         valid.email = validation(email, ['required', 'email']);
         valid.amount = validation(amount.toString(), ['required', 'number']);
+        valid.pdpa = validation(pdpa, ['true']);
         this.setState({ valid });
 
         for (const key of Object.keys(valid)) {
@@ -183,21 +214,21 @@ class Donate extends React.Component {
     render() {
         const {
             IDno, firstName, lastName, email, companyName, address, city, country, stateProvince, postalCode, phoneNumber, anonymous, receiveUpdate, currency, amount, recurring, recurringType, recurringAmount, valid, countryOptions, loading, amountDefault, remarks, programmeEvent,
-            programmeEventList,
+            programmeEventList, pdpa,
         } = this.state;
         
         return (
-            <Col style={{ padding: 0, height: window.innerHeight, backgroundImage: `url(${background})`, backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center center' }}>
+            <Col style={{ padding: 0, height: window.innerHeight > 1000 ? window.innerHeight : '120vh', backgroundImage: `url(${background})`, backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center center' }}>
                 <form onSubmit={this.handleSubmit}>
-                    <Col lg={10} md={12} sm={12} xs={12} className={window.innerWidth > 1200 ? 'center-h' : null} style={{ float: 'none', display: window.innerWidth > 992 ? 'flex' : null, padding: 0, maxWidth: 1200 }}>
+                    <Col lg={10} md={12} sm={12} xs={12} className={window.innerWidth > 1200 ? (window.innerHeight > 1000 ? 'center-center' : 'center-h') : null} style={{ float: 'none', display: window.innerWidth > 992 ? 'flex' : null, padding: 0, maxWidth: 1200 }}>
                         <Col sm={12} xs={12} style={{ backgroundColor: '#fff', padding: 0, backgroundImage: `url(${donateImage})`, backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center top', height: window.innerWidth > 992 ? 'auto' : 70 }}>
                             <div style={{ position: 'absolute', width: 130, height: 70, backgroundColor: '#fff', borderBottomRightRadius: 7 }}>
                                 <img className="center-center" src={require('../static/img/interaktiv-logo.png')} style={{ width: 100 }} alt="step logo" />
                             </div>
                             <Col lg={12} smHidden xsHidden style={{ position: 'absolute', bottom: 0, background: 'rgba(0,0,0,0.5)', height: '20%' }}>
-                                <h4 style={{ color: 'white' }}>Interaktiv Digital</h4>
+                                <h4 style={{ color: 'white' }}>InterAktiv Foundation</h4>
                                 <span className="white-text" style={{ lineHeight: '20px' }}>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam
+                                Our goal is to alleviate the poor and focus on global warming issues
                                 </span>
                             </Col>
                         </Col>
@@ -208,7 +239,7 @@ class Donate extends React.Component {
                                 <HelpBlock>{'email' in valid ? valid.email.text : null}</HelpBlock>
                             </FormGroup>
                             <FormGroup bsSize="small" validationState={'IDno' in valid ? valid.IDno.state : null}>
-                                <FormControl type="text" placeholder="ID no" name="IDno" onChange={this.handleChange} value={IDno} />
+                                <FormControl type="text" placeholder="ID No" name="IDno" onChange={this.handleChange} value={IDno} />
                                 <HelpBlock>{'IDno' in valid ? valid.IDno.text : null}</HelpBlock>
                             </FormGroup>
                             <FormGroup bsSize="small" validationState={'firstName' in valid ? valid.firstName.state : null}>
@@ -370,6 +401,17 @@ class Donate extends React.Component {
                             To make your donation by check, wire transfer, bitcoin, or securities transfer,&nbsp;
                                 <Link to="/" className="blue-text" >click here to learn how</Link>
                             </p>
+                            <Col className="clearfix">
+                                <Checkbox name="pdpa" validationState={'pdpa' in valid ? valid.pdpa.state : null} onChange={this.handleChange} value={pdpa}>
+                                    <span className="checkmark-box" />
+                                    <i className="sm-text">
+                                    By checking this box, I agree for Boys’ Town to use my personal information for purposes related to tax exemption, fundraising, database management and communications, security screening and statistical analysis. I accept that Boys’ Town will keep the personal data confidential and restrict accessibility to only authorised and need-to-know personnel.
+                                        <br />
+                                        <br />
+                                    Donations are entitled to 2.3 times tax deduction (if applicable). Please ensure you provide your NRIC/FIN No.
+                                    </i>
+                                </Checkbox>
+                            </Col>
                             <Button className="center-block" bsStyle="primary" bsSize="lg" type="submit" disabled={loading}>
                                 Submit
                             </Button>
