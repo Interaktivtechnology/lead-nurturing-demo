@@ -6,6 +6,7 @@ import {
 } from 'react-router-dom';
 import Donate from './donate';
 import ThankYou from './thankyou';
+import Application from './application';
 
 const AllRoutes = () => (
     <Router basename="/">
@@ -13,6 +14,7 @@ const AllRoutes = () => (
             <Switch>
                 <Route exact path="/" component={Donate} />
                 <Route exact path="/thank-you" component={ThankYou} />
+                <Route exact path="/shf" component={Application} />
                 <Route
                     render={(props) => {
                         window.location = `/404.html?from=${props.location.pathname}`;
