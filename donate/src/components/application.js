@@ -147,12 +147,12 @@ class Application extends React.Component {
                 <Col lg={12} md={12} sm={12} xs={12} style={{ backgroundColor: '#888', height: 80 }}>
                     <Col lg={8} md={12} sm={12} xs={12} lgOffset={2}>
                         <Col lg={6} md={6} sm={6} xs={6} style={{ padding: 0 }}>
-                            <Button className="center-block" bsStyle={tabActive === 1 ? 'primary' : ''} bsSize="lg" style={{ width: '100%', height: 80 }} onClick={() => this.setState({ tabActive: 1 })}>
+                            <Button className="center-block" bsStyle={tabActive === 1 ? 'primary' : ''} bsSize="lg" style={{ width: '100%', height: 80, border: '1px solid #888' }} onClick={() => this.setState({ tabActive: 1 })}>
                                 PERSONAL INFO
                             </Button>
                         </Col>
                         <Col lg={6} md={6} sm={6} xs={6} style={{ padding: 0 }}>
-                            <Button className="center-block" bsStyle={tabActive === 2 ? 'primary' : ''} bsSize="lg" style={{ width: '100%', height: 80 }} onClick={() => this.setState({ tabActive: 2 })}>
+                            <Button className="center-block" bsStyle={tabActive === 2 ? 'primary' : ''} bsSize="lg" style={{ width: '100%', height: 80, border: '1px solid #888' }} onClick={() => this.setState({ tabActive: 2 })}>
                                 EXPERIENCE
                             </Button>
                         </Col>
@@ -317,7 +317,7 @@ class Application extends React.Component {
                                     </Radio>
                                 </FormGroup>
                                 <FormGroup validationState={'schoolName' in valid ? valid.schoolName.state : null} bsSize="small">
-                                    <ControlLabel>Name of School</ControlLabel>
+                                    <ControlLabel>Name of Organisation/School</ControlLabel>
                                     <FormControl type="text" placeholder="" name="schoolName" onChange={this.handleChange} value={schoolName} />
                                     <HelpBlock>{'schoolName' in valid ? valid.schoolName.text : null}</HelpBlock>
                                 </FormGroup>
