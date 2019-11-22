@@ -7,6 +7,7 @@ import {
 import Donate from './donate';
 import ThankYou from './thankyou';
 import Application from './application';
+import Confirm from './confirm';
 
 const AllRoutes = () => (
     <Router basename="/">
@@ -15,6 +16,7 @@ const AllRoutes = () => (
                 <Route exact path="/" component={Donate} />
                 <Route exact path="/thank-you" component={ThankYou} />
                 <Route exact path="/shf" component={Application} />
+                <Route exact path="/confirm/:participantId/:programmeId" component={Confirm} />
                 <Route
                     render={(props) => {
                         window.location = `/404.html?from=${props.location.pathname}`;

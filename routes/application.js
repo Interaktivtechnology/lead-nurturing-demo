@@ -78,4 +78,48 @@ async (req, res) => {
     }
 });
 
+
+router.get('/getParticipant',
+    salesforce.createSfObject, async (req, res) => {
+        try {
+            let textQuery = 'Select Id, Name, Contact__r.Name';
+            textQuery = `${textQuery} from Participant__c where Id = '${req.query.participantId}'`;
+
+            const result = await req.sfConn.query(textQuery);
+
+            return res.status(200).send({
+                status: 200,
+                result,
+                info: result.records[0] || null,
+            });
+        } catch (error) {
+            console.info(error);
+            return res.status(500).send({
+                status: 500,
+                records: null,
+                message: error.message,
+            });
+        }
+});
+
+router.post('/confirmParticipant', salesforce.createSfObject, async (req, res) => {
+    try {
+        const result = await req.sfConn.sobject('Participant__c').update({
+            Id: req.body.participantId,
+            Status__c: req.body.confirmation,
+        });
+
+        return res.status(200).send({
+            status: 200,
+            records: result,
+        });
+    } catch (error) {
+        return res.status(500).send({
+            status: 500,
+            records: null,
+            message: error,
+        });
+    }
+});
+
 module.exports = router;
