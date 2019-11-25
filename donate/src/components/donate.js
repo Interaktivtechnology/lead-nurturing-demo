@@ -405,7 +405,7 @@ class Donate extends React.Component {
                                 <Checkbox name="pdpa" validationState={'pdpa' in valid ? valid.pdpa.state : null} onChange={this.handleChange} value={pdpa}>
                                     <span className="checkmark-box" />
                                     <i className="sm-text">
-                                    By checking this box, I agree for Boys’ Town to use my personal information for purposes related to tax exemption, fundraising, database management and communications, security screening and statistical analysis. I accept that Boys’ Town will keep the personal data confidential and restrict accessibility to only authorised and need-to-know personnel.
+                                    By checking this box, I agree for Interaktiv to use my personal information for purposes related to tax exemption, fundraising, database management and communications, security screening and statistical analysis. I accept that Interaktiv will keep the personal data confidential and restrict accessibility to only authorised and need-to-know personnel.
                                         <br />
                                         <br />
                                     Donations are entitled to 2.3 times tax deduction (if applicable). Please ensure you provide your NRIC/FIN No.
