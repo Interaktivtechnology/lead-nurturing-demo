@@ -46,7 +46,7 @@
     "redux-promise": "^0.5.3",
     "redux-thunk": "^2.2.0",
     "sweetalert2": "^8.0.5",
-    "validator": "^10.11.0"
+    "validator": "^13.7.0"
   },
   "devDependencies": {
     "@wdio/cli": "^5.4.5",
