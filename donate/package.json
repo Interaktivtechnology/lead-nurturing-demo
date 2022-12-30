@@ -50,7 +50,7 @@
   },
   "devDependencies": {
     "@wdio/cli": "^5.4.5",
-    "@wdio/mocha-framework": "^5.4.3",
+    "@wdio/mocha-framework": "^8.0.14",
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.2",
     "babel-polyfill": "^6.26.0",
